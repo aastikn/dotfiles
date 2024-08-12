@@ -13,3 +13,4 @@
 - fastfetch
 - ani-cli
 - warp cli
+- blueman for bluetooth 
