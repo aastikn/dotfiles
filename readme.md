@@ -6,6 +6,8 @@
 ### Preferred hyprland theme:
  HyprDots
 
+### Preferred Firefox theme:
+ ShyFox 3.8
 ### Preferred tools:
 - auto-cpufreq
 - fastfetch
