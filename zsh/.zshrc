@@ -1,6 +1,7 @@
 ###
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=/bin:/usr/bin:/usr/local/bin:/sbin:${PATH}
 
 # Path to your oh-my-zsh installation.
 #installation via script from github
@@ -13,7 +14,7 @@ export ZSH=/usr/share/oh-my-zsh/
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 # if you installed the package oh-my-zsh-powerline-theme-git then you type here "powerline" as zsh theme
-ZSH_THEME="jonathan"
+ZSH_THEME="agnoster"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -76,7 +77,7 @@ ZSH_THEME="jonathan"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=( git sudo zsh-256color zsh-autosuggestions zsh-syntax-highlighting )
+plugins=(git)
 
 if [ -f $ZSH/oh-my-zsh.sh ]; then
   source $ZSH/oh-my-zsh.sh
@@ -117,8 +118,7 @@ unsetopt SHARE_HISTORY
 
 export HISTCONTROL=ignoreboth:erasedups
 
- #Make nano the default editor
- 
+# Make nano the default editor
 
 export EDITOR='nano'
 export VISUAL='nano'
@@ -151,9 +151,6 @@ alias sprdd='sudo pacman -Rdd'
 alias spqo='sudo pacman -Qo'
 alias spsii='sudo pacman -Sii'
 
-#warp
-alias warpc='sudo systemctl warp-svc.service && warp-cli connect && curl https://www.cloudflare.com/cdn-cgi/trace/'
-alias warp='warp-cli'
 # show the list of packages that need this package - depends mpv as example
 function_depends()  {
     search=$(echo "$1")
@@ -253,6 +250,7 @@ alias tofish="sudo chsh $USER -s /bin/fish && echo 'Now log out.'"
 #switch between displaymanager or bootsystem
 alias toboot="sudo /usr/local/bin/arcolinux-toboot"
 alias togrub="sudo /usr/local/bin/arcolinux-togrub"
+alias torefind="sudo /usr/local/bin/arcolinux-torefind"
 alias tolightdm="sudo pacman -S lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings --noconfirm --needed ; sudo systemctl enable lightdm.service -f ; echo 'Lightm is active - reboot now'"
 alias tosddm="sudo pacman -S sddm --noconfirm --needed ; sudo systemctl enable sddm.service -f ; echo 'Sddm is active - reboot now'"
 alias toly="sudo pacman -S ly --noconfirm --needed ; sudo systemctl enable ly.service -f ; echo 'Ly is active - reboot now'"
@@ -267,19 +265,25 @@ alias kp='killall polybar'
 # quickly kill picom
 alias kpi='killall picom'
 
-#hardware info --short
+# hardware info --short
 alias hw="hwinfo --short"
 
-#audio check pulseaudio or pipewire
+# fastfetch --short
+alias ff="fastfetch"
+
+# audio check pulseaudio or pipewire
 alias audio="pactl info | grep 'Server Name'"
 
-#skip integrity check
+# skip integrity check
 alias paruskip='paru -S --mflags --skipinteg'
 alias yayskip='yay -S --mflags --skipinteg'
 alias trizenskip='trizen -S --skipinteg'
 
-#check vulnerabilities microcode
+# check vulnerabilities microcode
 alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
+
+#approximation of how old your hardware is
+alias howold="sudo lshw | grep -B 3 -A 8 BIOS"
 
 #check cpu
 alias cpu="cpuid -i | grep uarch | head -n 1"
@@ -326,8 +330,6 @@ alias riplong="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -3000 | n
 alias iso="cat /etc/dev-rel | awk -F '=' '/ISO/ {print $2}'"
 alias isoo="cat /etc/dev-rel"
 
-#open playground
-alias playground="cd code/playground && vim"
 #Cleanup orphaned packages
 alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
 
@@ -344,6 +346,8 @@ alias listaur="sudo pacman -Qqem"
 
 #clear
 alias clean="clear; seq 1 $(tput cols) | sort -R | sparklines | lolcat"
+alias cls="clear; seq 1 $(tput cols) | sort -R | sparklines | lolcat"
+
 
 #search content with ripgrep
 alias rg="rg --sort path"
@@ -358,6 +362,7 @@ alias nlightdm="sudo $EDITOR /etc/lightdm/lightdm.conf"
 alias npacman="sudo $EDITOR /etc/pacman.conf"
 alias ngrub="sudo $EDITOR /etc/default/grub"
 alias nconfgrub="sudo $EDITOR /boot/grub/grub.cfg"
+alias nmakepkg="sudo $EDITOR /etc/makepkg.conf"
 alias nmkinitcpio="sudo $EDITOR /etc/mkinitcpio.conf"
 alias nmirrorlist="sudo $EDITOR /etc/pacman.d/mirrorlist"
 alias narcomirrorlist="sudo $EDITOR /etc/pacman.d/arcolinux-mirrorlist"
@@ -374,17 +379,28 @@ alias nb="$EDITOR ~/.bashrc"
 alias nz="$EDITOR ~/.zshrc"
 alias nf="$EDITOR ~/.config/fish/config.fish"
 alias nneofetch="$EDITOR ~/.config/neofetch/config.conf"
+alias nfastfetch="$EDITOR ~/.config/fastfetch/config.jsonc"
 alias nplymouth="sudo $EDITOR /etc/plymouth/plymouthd.conf"
 alias nvconsole="sudo $EDITOR /etc/vconsole.conf"
 alias nenvironment="sudo $EDITOR /etc/environment"
 alias nloader="sudo $EDITOR /boot/efi/loader/loader.conf"
+alias nrefind="sudo $EDITOR /boot/refind_linux.conf"
+alias nalacritty="nano /home/$USER/.config/alacritty/alacritty.toml"
 
+#removing packages
+alias rvariety="arcolinux-remove-variety"
+alias rkmix="arcolinux-remove-kmix"
+alias rconky="arcolinux-remove-conky"
 
 #reading logs with bat
 alias lcalamares="bat /var/log/Calamares.log"
 alias lpacman="bat /var/log/pacman.log"
 alias lxorg="bat /var/log/Xorg.0.log"
 alias lxorgo="bat /var/log/Xorg.0.log.old"
+
+#reading logs with sublime-text-4
+alias scal="subl /var/log/Calamares.log"
+alias spac="subl /etc/pacman.conf"
 
 #gpg
 #verify signature for isos
@@ -408,8 +424,8 @@ alias fix-keys="/usr/local/bin/arcolinux-fix-pacman-databases-and-keys"
 #alias fix-sddm-config="/usr/local/bin/arcolinux-fix-sddm-config"
 alias fix-pacman-conf="/usr/local/bin/arcolinux-fix-pacman-conf"
 alias fix-pacman-keyserver="/usr/local/bin/arcolinux-fix-pacman-gpg-conf"
-alias fix-grub="/usr/local/bin/arcolinux-fix-grub"
-alias fixgrub="/usr/local/bin/arcolinux-fix-grub"
+alias fix-grub="sudo /usr/local/bin/arcolinux-fix-grub"
+alias fixgrub="sudo /usr/local/bin/arcolinux-fix-grub"
 
 #maintenance
 alias big="expac -H M '%m\t%n' | sort -h | nl"
@@ -438,13 +454,11 @@ alias xdw="ls /usr/share/wayland-sessions"
 alias kernel="ls /usr/lib/modules"
 alias kernels="ls /usr/lib/modules"
 
-#am I on grub or systemd-boot
-alias boot="sudo bootctl status | grep Product"
+#am I on grub,systemd-boot or refind
+alias boot="sudo /usr/local/bin/arcolinux-boot"
 
-#emulator 
-alias emulator="cd ~/Downloads/commandlinetools-linux-11076708_latest/emulator && ./emulator -avd emulator-a -skin 768x1280"
-#rofi
-alias apps="rofi -show drun"
+#setup peritys workflow
+alias peritys="~/.scripts/setup_workspaces.sh"
 # # ex = EXtractor for all kinds of archives
 # # usage: ex <file>
 ex ()
@@ -517,24 +531,45 @@ alias pamac-unlock="sudo rm /var/tmp/pamac/dbs/db.lock"
 #moving your personal files and folders from /personal to ~
 alias personal='cp -Rf /personal/* ~'
 
-export PATH=/home/gnaran/nodejs/bin:$PATH
-export PATH="/home/gnaran/Downloads/jdk-17.0.11+9/bin":$PATH
-export PATH="/home/gnaran/go/bin":$PATH
-export ANDROID_HOME=$HOME/Android/Sdk
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/platform-tools
-#export PATH="/home/gnaran/.cargo/bin":$PATH
-export PATH="/home/gnaran/Downloads/flutter_linux_3.22.2-stable/flutter/bin":$PATH
-export PATH="$PATH":"$HOME/.pub-cache/bin"
+#custom aliases
+
+#to launch the todo app
+alias todo='~/todoapp/./to_do_app'
+
+#to launch emulator
+alias aemu=' ~/src/emulator/emulator -avd "my_avd"'
+# export PATH=/home/gnaran/nodejs/bin:$PATH
+export PATH=$HOME/src/flutter/bin:$PATH
+export PATH=$HOME/src/cmdline-tools/bin:$PATH
+# export PATH=$HOME/src/jdk-17.0.13+11/bin:$PATH
+# export PATH=$HOME/src/jdk-17.0.13+11-jre/bin:$PATH
+# export PATH=$HOME/src/jdk-21.0.5+11/bin:$PATH
+# export PATH=$HOME/src/jdk-17.0.13+11-jre/bin:$PATH
+# export JAVA_HOME=/bin/java/bin:$PATH
+export JAVA_HOME='/usr/lib/jvm/java-17-openjdk'
+export PATH=$JAVA_HOME/bin:$PATH 
+
+# export PATH="/home/gnaran/Downloads/jdk-17.0.11+9/bin":$PATH 
+# export PATH="/home/gnaran/go/bin":$PATH 
+# export ANDROID_HOME=$HOME/Android/Sdk 
+# export PATH=$PATH:$ANDROID_HOME/emulator 
+# export PATH=$PATH:$ANDROID_HOME/platform-tools
+#export PATH="/home/gnaran/.cargo/bin":$PATH 
+#export PATH="/home/gnaran/Downloads/flutter_linux_3.22.2-stable/flutter/bin":$PATH 
+#export PATH="$PATH":"$HOME/.pub-cache/bin" [[ -f ~/.zshrc-personal ]] && . ~/.zshrc-personal reporting tools - install when not installed neofetch screenfetch alsi paleofetch fetch fastfetch hfetch sfetch ufetch ufetch-arco pfetch sysinfo sysinfo-retro
+#cpufetch
+#create a file called .zshrc-personal and put all your personal aliases
+#in there. They will not be overwritten by skel.
+
 [[ -f ~/.zshrc-personal ]] && . ~/.zshrc-personal
 
 # reporting tools - install when not installed
+#fastfetch
 #neofetch
 #screenfetch
 #alsi
 #paleofetch
 #fetch
-#fastfetch
 #hfetch
 #sfetch
 #ufetch
@@ -544,11 +579,8 @@ export PATH="$PATH":"$HOME/.pub-cache/bin"
 #sysinfo-retro
 #cpufetch
 
-hyfetch -b fastfetch
+pokemon-colorscripts --random
+#hyfetch
 
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-alias vim=nvim
-eval "$(_AUTO_CPUFREQ_COMPLETE=zsh_source auto-cpufreq)"
+
